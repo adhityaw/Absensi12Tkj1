@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ABSENSI 12 TKJ 1</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* --- CSS CUSTOM --- */
+      body {
+        font-family: "Poppins", sans-serif;
+        background: radial-gradient(circle at top left, #1e293b, #020617);
+        margin: 0;
+        color: #f8fafc;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 1.5rem;
+      }
+
+      /* Efek Kaca (Glassmorphism) */
+      .glass {
+        background: rgba(30, 41, 59, 0.7);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      }
+
+      .glass-inner {
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      /* Container Kamera */
+      .camera-box {
+        position: relative;
+        background-color: #000;
+        border: 2px solid rgba(34, 211, 238, 0.3);
+        overflow: hidden;
+        box-shadow: 0 0 20px rgba(34, 211, 238, 0.1);
+      }
+
+      /* Animasi Garis Scan */
+      .scan-line {
+        height: 3px;
+        background: linear-gradient(
+          to right,
+          transparent,
+          #22d3ee,
+          transparent
+        );
+        position: absolute;
+        width: 100%;
+        top: 0;
+        box-shadow: 0 0 15px #22d3ee;
+        animation: scanAnimation 3s ease-in-out infinite;
+        z-index: 10;
+      }
+
+      @keyframes scanAnimation {
+        0% {
+          top: 0%;
+          opacity: 0.3;
+        }
+        50% {
+          opacity: 1;
+        }
+        100% {
+          top: 100%;
+          opacity: 0.3;
+        }
+      }
+
+      /* Dropdown Styling */
+      select {
+        appearance: none;
+        -webkit-appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2322d3ee'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 1.2em;
+      }
+
+      select option {
+        background-color: #1e293b;
+        color: white;
+      }
+
+      /* Button Hover Effect */
+      #btn-submit {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      #btn-submit:hover {
+        box-shadow: 0 0 20px rgba(6, 182, 212, 0.5);
+        transform: translateY(-2px);
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      class="glass w-full max-w-md rounded-[32px] p-7 text-white relative overflow-hidden"
+    >
+      <div
+        class="absolute -top-20 -right-20 w-40 h-40 bg-cyan-500 rounded-full blur-[100px] opacity-20"
+      ></div>
+
+      <div class="text-center mb-6">
+        <h1 class="text-2xl font-bold tracking-tight">
+          ABSENSI SISWA SISWI 12 TKJ 1 ✨
+        </h1>
+        <p
+          class="text-cyan-400 text-[10px] tracking-[0.2em] font-semibold mt-1 uppercase"
+        >
+          SMK YPUI PARUNG - TKJ
+        </p>
+      </div>
+
+      <div class="camera-box w-full aspect-square rounded-2xl mb-6 shadow-2xl">
+        <video
+          id="webcam"
+          autoplay
+          playsinline
+          class="w-full h-full object-cover"
+        ></video>
+        <div class="scan-line"></div>
+        <canvas id="photo-canvas" class="hidden"></canvas>
+      </div>
+
+      <div class="space-y-4">
+        <div class="glass-inner p-4 rounded-2xl flex items-center gap-4">
+          <div class="text-2xl">📍</div>
+          <div class="overflow-hidden">
+            <p
+              class="text-[9px] text-gray-400 uppercase tracking-widest font-bold"
+            >
+              Lokasi Saat Ini
+            </p>
+            <p
+              id="location-text"
+              class="text-xs text-cyan-200 font-mono truncate"
+            >
+              Mencari koordinat...
+            </p>
+          </div>
+        </div>
+
+        <div class="relative">
+          <select
+            id="student-name"
+            class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl text-center focus:outline-none focus:border-cyan-500/50 transition-all text-sm font-medium cursor-pointer"
+          >
+            <option value="" disabled selected>-- Pilih Nama Anda --</option>
+            <option value="Adhit">Adhitya Wardantika</option>
+            <option value="Adi">Adi Nurdiansyah</option>
+            <option value="Anjeli">Anjeli Anjelita</option>
+            <option value="Arianti">Arianti Mulia Dewi</option>
+            <option value="Bagas">Bagas Aditya Saputra</option>
+            <option value="Dava">Dava Leikha P</option>
+            <option value="Denis">Denis Ramadhan</option>
+            <option value="Desta">Desta Ayodya R</option>
+            <option value="Dimas">Dimas Ramadhan</option>
+            <option value="Fadinda">Fadinda Maharani</option>
+            <option value="Fahza">Fahza Atha Ghsalib</option>
+            <option value="Firdaus">Firdaus Nabil Bahri</option>
+            <option value="Firmansyah">Firmansyah</option>
+            <option value="Heru">Heru Wansyah</option>
+            <option value="Idzhar">Idzhar Alamsyah</option>
+            <option value="Izmi">Izmi Husna</option>
+            <option value="Khoirunnisa">Khoirunnisa Azzahra</option>
+            <option value="Khadavi">Mochammad Khadavi</option>
+            <option value="Fachri">Muhammad Fachri Hidyatullah</option>
+            <option value="Ramdan">Muhammad Fachri Ramdan</option>
+            <option value="Dzidan">Muhammad Dzidan Arrizal</option>
+            <option value="Farel">Muhammad Farel Aulia Rizky</option>
+            <option value="Nanda">Nanda Aditya</option>
+            <option value="Naurah">Naurah Fatihah</option>
+            <option value="Rakha">Rakha Ramadhan</option>
+            <option value="Razan">Razan Zaki Taris</option>
+            <option value="Raziq">Raziq Bagaskara</option>
+            <option value="Risky">Risky Maulana</option>
+            <option value="Shankara">Shankara Premasywara</option>
+          </select>
+          </select>
+        </div>
+
+        <button
+          onclick="prosesAbsensi()"
+          id="btn-submit"
+          class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 py-4 rounded-2xl font-bold shadow-lg flex justify-center items-center gap-2 mt-2"
+        >
+          SUBMIT ABSENSI 🚀
+        </button>
+      </div>
+
+      <div
+        class="mt-8 flex justify-between items-center text-[10px] text-gray-500 font-medium italic"
+      >
+        <p id="clock">00:00:00</p>
+        <p>Adhit Project 🛰️</p>
+      </div>
+    </div>
+
+    <script>
+      const video = document.getElementById("webcam");
+      const locationDisplay = document.getElementById("location-text");
+      const nameInput = document.getElementById("student-name");
+      const btnSubmit = document.getElementById("btn-submit");
+
+      // 1. Inisialisasi Kamera
+      async function initCamera() {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: "user" },
+            audio: false,
+          });
+          video.srcObject = stream;
+        } catch (err) {
+          alert("Akses kamera ditolak. Berikan izin untuk lanjut!");
+          console.error(err);
+        }
+      }
+
+      // 2. Inisialisasi Lokasi
+      function initLocation() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (pos) => {
+              const lat = pos.coords.latitude.toFixed(5);
+              const lng = pos.coords.longitude.toFixed(5);
+              locationDisplay.innerText = `${lat}, ${lng}`;
+              locationDisplay.classList.add("text-green-400");
+            },
+            () => {
+              locationDisplay.innerText = "GPS Tidak Aktif";
+              locationDisplay.classList.add("text-red-400");
+            }
+          );
+        }
+      }
+
+      // 3. Jam Digital
+      setInterval(() => {
+        const now = new Date();
+        document.getElementById("clock").innerText =
+          now.toLocaleTimeString("id-ID");
+      }, 1000);
+
+      // 4. Proses Submit (Simulasi)
+      function prosesAbsensi() {
+        const name = nameInput.value;
+
+        if (!name) {
+          alert("Mohon pilih nama kamu dulu!");
+          return;
+        }
+
+        // Animasi Tombol
+        const originalText = btnSubmit.innerHTML;
+        btnSubmit.innerHTML = "MENGIRIM...";
+        btnSubmit.disabled = true;
+        btnSubmit.classList.add("opacity-50");
+
+        // Simulasi proses pengiriman data
+        setTimeout(() => {
+          alert(
+            `✅ BERHASIL!\n\nAbsensi atas nama ${name} telah tercatat bersama foto dan lokasi kamu.\nOrang tua akan segera menerima notifikasi.`
+          );
+
+          // Reset UI
+          btnSubmit.innerHTML = originalText;
+          btnSubmit.disabled = false;
+          btnSubmit.classList.remove("opacity-50");
+          nameInput.value = "";
+        }, 2000);
+      }
+
+      // Jalankan saat startup
+      initCamera();
+      initLocation();
+
+      // Fungsi untuk mengambil nama dari link (URL)
+window.onload = function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const namaDariQR = urlParams.get('nama'); // Mencari tulisan ?nama=...
+    
+    if (namaDariQR) {
+        const selectSiswa = document.getElementById('student-name');
+        selectSiswa.value = namaDariQR; // Otomatis pilih nama di dropdown
+    }
+};
+    </script>
+  </body>
+</html>
